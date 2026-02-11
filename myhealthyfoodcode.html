@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Healthy Food</title>
+
+  <style>
+    :root{
+      --text:#111;
+      --muted:#666;
+      --white:#fff;
+      --shadow: 0 18px 50px rgba(0,0,0,.18);
+      --btn:#8f9096;
+      --btn2:#7f8086;
+      --btnText:#fff;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
+      background:#e9eaef;
+    }
+
+    /* ====== HERO BACKGROUND ====== */
+    .hero{
+      min-height:100vh;
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+    }
+    .hero::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(circle at 70% 40%, rgba(255,255,255,.35), rgba(255,255,255,.05) 55%, rgba(0,0,0,.02) 100%),
+        linear-gradient(135deg, rgba(255,255,255,.45), rgba(255,255,255,.15)),
+        url("background.jpg");
+      background-size: cover;
+      background-position: center;
+      filter: blur(1px) saturate(1.1) contrast(1.05);
+      transform: scale(1.03);
+    }
+    .hero::after{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(to bottom, rgba(255,255,255,.08), rgba(255,255,255,.18));
+      pointer-events:none;
+    }
+
+    /* ====== TOP NAV ====== */
+    header{
+      position:relative;
+      z-index:5;
+      padding:18px 22px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .nav{
+      display:flex;
+      gap:22px;
+      align-items:center;
+      font-weight:600;
+      color:#2f2f2f;
+      user-select:none;
+    }
+    .nav a{
+      color:inherit;
+      text-decoration:none;
+      opacity:.95;
+      padding:6px 4px;
+      border-bottom:2px solid transparent;
+      cursor:pointer;
+    }
+    .nav a:hover{border-bottom-color: rgba(0,0,0,.18)}
+
+    .actions{display:flex; align-items:center; gap:10px;}
+
+    /* Jordan flag button */
+    .langBtn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.70);
+      backdrop-filter: blur(8px);
+      cursor:pointer;
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+      font-weight:800;
+      font-size:12px;
+    }
+    .flag{
+      width:26px; height:18px; border-radius:4px;
+      border:1px solid rgba(0,0,0,.10);
+      overflow:hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,.10);
+      flex:0 0 auto;
+      background:#fff;
+    }
+    .flag svg{display:block; width:100%; height:100%}
+
+    /* ====== CENTER PANEL ====== */
+    .center{
+      position:relative;
+      z-index:5;
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 10px 18px 28px;
+    }
+    .panel{
+      width:min(900px, 100%);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:14px;
+    }
+
+    /* ====== LOGO CIRCLE (RTL FIX) ====== */
+    .logoCircle{
+      width:210px; height:210px;
+      border-radius:50%;
+      background: rgba(255,255,255,.65);
+      border:1px solid rgba(0,0,0,.08);
+      backdrop-filter: blur(6px);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+
+      display:grid;
+      place-items:center;
+    }
+    .logoCircle::after{
+      content:"";
+      position:absolute; inset:-30%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), transparent 55%);
+      transform: rotate(20deg);
+      opacity:.9;
+      pointer-events:none;
+    }
+
+    .logoText{
+      position:relative;
+      z-index:1;
+
+      direction:ltr;
+      unicode-bidi:isolate;
+
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding: 6px 10px;
+    }
+    .logoText .big{
+      font-family: Georgia, "Times New Roman", serif;
+      font-size:86px;
+      letter-spacing:1px;
+      color:#7a2f2f;
+      line-height:0.9;
+      margin:0;
+      transform: translateY(2px);
+    }
+    .logoText .sub{
+      margin: 6px 0 0;
+      font-size:14px;
+      color:#222;
+      font-weight:700;
+      white-space:nowrap;
+    }
+    html[dir="ltr"] .logoText .sub{ letter-spacing:3px; }
+    html[dir="rtl"] .logoText .sub{ letter-spacing:0; }
+
+    .title{
+      margin:0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 44px;
+      color:#111;
+    }
+    .title small{
+      font-family: inherit;
+      font-size: 44px;
+      font-weight:400;
+    }
+
+    /* ====== BUTTON GRID ====== */
+    .menuGrid{
+      margin-top: 6px;
+      width:min(760px, 100%);
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 16px;
+      align-items:center;
+      justify-items:center;
+    }
+    .dishBtn{
+      width:100%;
+      max-width: 360px;
+      border: none;
+      cursor:pointer;
+      border-radius: 6px;
+      padding: 11px 14px;
+      background: linear-gradient(to bottom, var(--btn), var(--btn2));
+      color: var(--btnText);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      box-shadow: 0 10px 20px rgba(0,0,0,.12);
+      transition: transform .06s ease, filter .2s ease;
+      text-align:left;
+    }
+    .dishBtn:hover{filter: brightness(1.05)}
+    .dishBtn:active{transform: translateY(1px)}
+    .dishBtn .name{
+      font-size: 15px;
+      font-weight:700;
+      letter-spacing:.2px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .dishBtn .arrow{
+      width:26px; height:26px;
+      border-radius: 6px;
+      background: rgba(255,255,255,.12);
+      display:grid; place-items:center;
+      flex:0 0 auto;
+      border: 1px solid rgba(255,255,255,.16);
+    }
+    .dishBtn .arrow svg{width:16px; height:16px; opacity:.95}
+
+    /* ====== BOTTOM NOTE ====== */
+    .bottomNote{
+      margin-top: 14px;
+      width:min(760px, 100%);
+      text-align:center;
+      font-size: 13px;
+      color:#2c2c2c;
+      padding:10px 12px;
+      border-radius: 10px;
+      background: rgba(255,255,255,.65);
+      border:1px solid rgba(0,0,0,.08);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+    }
+
+    /* ====== MODAL (Dish + Contact) ====== */
+    .modalBackdrop{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.45);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:999;
+    }
+    .modal{
+      width:min(920px, 100%);
+      border-radius: 18px;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.55);
+      box-shadow: 0 25px 80px rgba(0,0,0,.30);
+      overflow:hidden;
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+    }
+    .modalMedia{
+      background: linear-gradient(135deg, rgba(0,0,0,.08), rgba(0,0,0,.02));
+      min-height: 260px;
+      position:relative;
+    }
+    .modalMedia img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .modalMedia .imgHint{
+      position:absolute; inset:0;
+      display:grid;
+      place-items:center;
+      padding:18px;
+      text-align:center;
+      color: rgba(0,0,0,.60);
+      font-size: 13px;
+    }
+    .modalBody{
+      padding: 18px 18px 16px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .modalTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .modalTitle{
+      margin:0;
+      font-size: 20px;
+      font-weight:900;
+    }
+    .closeBtn{
+      border:none;
+      background: rgba(0,0,0,.06);
+      border:1px solid rgba(0,0,0,.10);
+      cursor:pointer;
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-weight:900;
+    }
+    .desc{
+      margin:0;
+      color: rgba(0,0,0,.72);
+      line-height:1.6;
+      font-size: 14px;
+    }
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top: 2px;
+    }
+    .chip{
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.75);
+      border:1px solid rgba(0,0,0,.10);
+      font-weight:900;
+      font-size: 12px;
+    }
+    .divider{
+      height:1px;
+      background: rgba(0,0,0,.08);
+      margin: 6px 0 2px;
+    }
+    .smallNote{
+      font-size: 12px;
+      color: rgba(0,0,0,.65);
+      line-height:1.5;
+    }
+
+    /* Contact popup content */
+    .contactBox{
+      padding: 6px 0 0;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .contactNumber{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.75);
+      font-weight:900;
+      font-size: 14px;
+      user-select:text;
+    }
+    .contactActions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .ctaBtn{
+      border:none;
+      cursor:pointer;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-weight:900;
+      background: rgba(0,0,0,.08);
+      border:1px solid rgba(0,0,0,.10);
+    }
+    .ctaBtn.primary{
+      background: #25D366;
+      color: #fff;
+      border: 1px solid rgba(0,0,0,.06);
+    }
+
+    /* ====== RESPONSIVE ====== */
+    @media (max-width: 720px){
+      .logoCircle{width:180px; height:180px;}
+      .logoText .big{font-size:74px;}
+      .title, .title small{font-size:34px;}
+      header{padding:14px 14px;}
+      .nav{gap:14px;}
+      .menuGrid{grid-template-columns:1fr; gap:10px;}
+      .dishBtn{max-width: 520px;}
+      .modal{grid-template-columns:1fr;}
+    }
+
+    /* ====== RTL TWEAKS ====== */
+    [dir="rtl"] .dishBtn{text-align:right}
+    [dir="rtl"] .dishBtn .arrow svg{transform: scaleX(-1)}
+    [dir="rtl"] .nav{flex-direction:row-reverse}
+    [dir="rtl"] .modalTop{flex-direction:row-reverse}
+    [dir="rtl"] .chips{justify-content:flex-end}
+    [dir="rtl"] .contactNumber{flex-direction:row-reverse}
+    [dir="rtl"] .contactActions{justify-content:flex-end}
+  </style>
+</head>
+
+<body>
+  <div class="hero" id="home">
+    <header>
+      <div class="nav" aria-label="Primary navigation">
+        <a href="#home" id="navHome">Home</a>
+        <a href="#menu" id="navMenu">Menu</a>
+        <a href="#contact" id="navContact">Contact</a>
+      </div>
+
+      <div class="actions">
+        <button class="langBtn" id="langToggle" type="button" aria-label="Switch language">
+          <span class="flag" aria-hidden="true">
+            <svg viewBox="0 0 26 18" xmlns="http://www.w3.org/2000/svg">
+              <rect width="26" height="6" y="0" fill="#000"/>
+              <rect width="26" height="6" y="6" fill="#fff"/>
+              <rect width="26" height="6" y="12" fill="#007A3D"/>
+              <polygon points="0,0 10,9 0,18" fill="#CE1126"/>
+              <circle cx="3.7" cy="9" r="1.2" fill="#fff"/>
+            </svg>
+          </span>
+          <span id="langLabel">AR</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="center" id="menu">
+      <div class="panel" aria-label="Menu panel">
+        <div class="logoCircle" aria-label="My Healthy Food logo">
+          <div class="logoText">
+            <div class="big">MY</div>
+            <div class="sub" id="logoSub">HEALTHY FOOD</div>
+          </div>
+        </div>
+
+        <h1 class="title" id="pageTitle"><small>Chicken menu:</small></h1>
+
+        <div class="menuGrid" id="menuGrid" role="list"></div>
+
+        <div class="bottomNote" id="bottomNote">
+          Increasing the Grams of chicken adds 0.75 JOD
+        </div>
+
+        <div id="contact" style="height:1px;"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- UNIVERSAL MODAL (Dish + Contact) -->
+  <div class="modalBackdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-label="Popup">
+    <div class="modal" id="modalRoot">
+      <div class="modalMedia" id="modalMedia">
+        <div class="imgHint" id="imgHint">Dish image will appear here (dish1.png, dish2.png, ...)</div>
+        <img id="modalImg" alt="" style="display:none;">
+      </div>
+      <div class="modalBody" id="modalBody">
+        <div class="modalTop">
+          <h2 class="modalTitle" id="modalTitle">—</h2>
+          <button class="closeBtn" id="closeModal" type="button">✕</button>
+        </div>
+
+        <p class="desc" id="modalDesc">—</p>
+
+        <div class="chips" id="chipsRow">
+          <span class="chip" id="chipCalories">— kcal</span>
+          <span class="chip" id="chipPrice">— JOD</span>
+        </div>
+
+        <div class="divider" id="divider"></div>
+        <div class="smallNote" id="modalNote">
+          Increasing the Grams of chicken adds 0.75 JOD
+        </div>
+
+        <!-- Contact extra area -->
+        <div class="contactBox" id="contactBox" style="display:none;">
+          <div class="contactNumber" id="contactNumber">
+            <span id="contactText">+962797013456</span>
+          </div>
+          <div class="contactActions">
+            <button class="ctaBtn" id="copyBtn" type="button">Copy</button>
+            <a class="ctaBtn primary" id="waBtn" href="#" target="_blank" rel="noopener">WhatsApp</a>
+          </div>
+          <div class="smallNote" id="contactHintText" style="margin-top:2px;">
+            You can copy the number or open WhatsApp.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const CONTACT_NUMBER = "+962797013456";
+    const CONTACT_WA = "https://wa.me/962797013456";
+
+    // ====== DATA (grams REMOVED from all) ======
+    const dishes = [
+      { id:1, img:"dish1.png", calories:390, price:3,
+        name_en:"Chicken Breast", desc_en:"150 G of white rice & 150G of chicken breast.",
+        name_ar:"صدر دجاج",       desc_ar:"١٥٠ غ أرز أبيض + ١٥٠ غ صدر دجاج."
+      },
+      { id:2, img:"dish2.png", calories:495, price:3,
+        name_en:"Chicken Masala", desc_en:"150 G of white rice & 150G of chicken masala.",
+        name_ar:"دجاج مسالا",     desc_ar:"١٥٠ غ أرز أبيض + ١٥٠ غ دجاج مسالا."
+      },
+      { id:3, img:"dish3.png", calories:470, price:3,
+        name_en:"Chinese Chicken", desc_en:"150 G of white rice & 150G of Chinese chicken.",
+        name_ar:"دجاج صيني",       desc_ar:"١٥٠ غ أرز أبيض + ١٥٠ غ دجاج صيني."
+      },
+      { id:4, img:"dish4.png", calories:505, price:3,
+        name_en:"Chicken with Cream Cheese", desc_en:"Chicken with cream cheese.",
+        name_ar:"دجاج بالجبنة الكريمية",     desc_ar:"دجاج مع جبنة كريمية."
+      },
+      { id:5, img:"dish5.png", calories:485, price:3,
+        name_en:"Chicken with Lemon", desc_en:"150 G of white rice & 150G of chicken lemon.",
+        name_ar:"دجاج بالليمون",      desc_ar:"١٥٠ غ أرز أبيض + ١٥٠ غ دجاج بالليمون."
+      },
+      { id:6, img:"dish6.png", calories:495, price:3,
+        name_en:"Chicken Fajita", desc_en:"150 G of white rice & 150G of chicken fajita.",
+        name_ar:"دجاج فاهيتا",     desc_ar:"١٥٠ غ أرز أبيض + ١٥٠ غ دجاج فاهيتا."
+      },
+      { id:7, img:"dish7.png", calories:460, price:3,
+        name_en:"Chicken Shawarma Meal", desc_en:"150 G of white rice & 150G of shawarma.",
+        name_ar:"وجبة شاورما دجاج",        desc_ar:"١٥٠ غ أرز أبيض + ١٥٠ غ شاورما."
+      },
+      { id:8, img:"dish8.png", calories:220, price:1.5,
+        name_en:"Shawarma Sandwich", desc_en:"Chicken shawarma wrapped in a tasty sandwich.",
+        name_ar:"ساندويش شاورما",     desc_ar:"شاورما دجاج داخل ساندويش لذيذ."
+      },
+      { id:9, img:"dish9.png", calories:210, price:1.5,
+        name_en:"Fajita Sandwich", desc_en:"75 G of chicken fajita wrapped in a tasty sandwich.",
+        name_ar:"ساندويش فاهيتا",  desc_ar:"٧٥ غ دجاج فاهيتا داخل ساندويش لذيذ."
+      }
+    ];
+
+    // ====== i18n ======
+    const i18n = {
+      en: {
+        dir:"ltr", langLabel:"AR",
+        navHome:"Home", navMenu:"Menu", navContact:"Contact",
+        pageTitle:"Chicken menu:", logoSub:"HEALTHY FOOD",
+        kcal:"kcal", jod:"JOD",
+        imgHint:"Dish image will appear here (dish1.png, dish2.png, ...)",
+        note:"Increasing the Grams of chicken adds 0.75 JOD",
+        close:"✕",
+        contactTitle:"Contact",
+        contactDesc:"Reach us on this number:",
+        copy:"Copy",
+        copied:"Copied!",
+        wa:"WhatsApp",
+        contactHint:"You can copy the number or open WhatsApp."
+      },
+      ar: {
+        dir:"rtl", langLabel:"EN",
+        navHome:"الرئيسية", navMenu:"المنيو", navContact:"تواصل",
+        pageTitle:"منيو الدجاج:", logoSub:"MY HEALTHY FOOD",
+        kcal:"سعرة", jod:"دينار",
+        imgHint:"ستظهر صورة الطبق هنا (dish1.png, dish2.png, ...)",
+        note:"زيادة مبلغ 0.75 دينار في حالة إضافة الدجاج",
+        close:"✕",
+        contactTitle:"تواصل",
+        contactDesc:"تواصل معنا على الرقم التالي:",
+        copy:"نسخ",
+        copied:"تم النسخ!",
+        wa:"واتساب",
+        contactHint:"يمكنك نسخ الرقم أو فتح الواتساب."
+      }
+    };
+
+    // ====== elements ======
+    const el = {
+      navHome: document.getElementById("navHome"),
+      navMenu: document.getElementById("navMenu"),
+      navContact: document.getElementById("navContact"),
+      langToggle: document.getElementById("langToggle"),
+      langLabel: document.getElementById("langLabel"),
+      pageTitle: document.getElementById("pageTitle"),
+      menuGrid: document.getElementById("menuGrid"),
+      bottomNote: document.getElementById("bottomNote"),
+      logoSub: document.getElementById("logoSub"),
+
+      modalBackdrop: document.getElementById("modalBackdrop"),
+      closeModal: document.getElementById("closeModal"),
+      modalTitle: document.getElementById("modalTitle"),
+      modalDesc: document.getElementById("modalDesc"),
+      modalImg: document.getElementById("modalImg"),
+      imgHint: document.getElementById("imgHint"),
+      chipsRow: document.getElementById("chipsRow"),
+      chipCalories: document.getElementById("chipCalories"),
+      chipPrice: document.getElementById("chipPrice"),
+      modalNote: document.getElementById("modalNote"),
+      divider: document.getElementById("divider"),
+      modalMedia: document.getElementById("modalMedia"),
+
+      contactBox: document.getElementById("contactBox"),
+      contactText: document.getElementById("contactText"),
+      copyBtn: document.getElementById("copyBtn"),
+      waBtn: document.getElementById("waBtn"),
+      contactHintText: document.getElementById("contactHintText"),
+    };
+
+    let lang = "en";
+
+    function esc(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+    function fmtPrice(p){
+      return Number.isInteger(p) ? String(p) : p.toFixed(1);
+    }
+
+    function applyLang(newLang){
+      lang = newLang;
+      const t = i18n[lang];
+
+      document.documentElement.lang = lang;
+      document.documentElement.dir = t.dir;
+
+      el.langLabel.textContent = t.langLabel;
+      el.navHome.textContent = t.navHome;
+      el.navMenu.textContent = t.navMenu;
+      el.navContact.textContent = t.navContact;
+
+      el.pageTitle.innerHTML = `<small>${esc(t.pageTitle)}</small>`;
+      el.logoSub.textContent = t.logoSub;
+
+      el.bottomNote.textContent = t.note;
+      el.imgHint.textContent = t.imgHint;
+      el.modalNote.textContent = t.note;
+      el.closeModal.textContent = t.close;
+
+      el.contactText.textContent = CONTACT_NUMBER;
+      el.copyBtn.textContent = t.copy;
+      el.waBtn.textContent = t.wa;
+      el.contactHintText.textContent = t.contactHint;
+
+      renderButtons();
+    }
+
+    function renderButtons(){
+      el.menuGrid.innerHTML = dishes.map(d => {
+        const name = (lang === "ar") ? d.name_ar : d.name_en;
+        return `
+          <button class="dishBtn" type="button" role="listitem" data-id="${d.id}" aria-label="${esc(name)}">
+            <span class="name">${esc(name)}</span>
+            <span class="arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 18l6-6-6-6" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </button>
+        `;
+      }).join("");
+
+      el.menuGrid.querySelectorAll(".dishBtn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = Number(btn.dataset.id);
+          const dish = dishes.find(x => x.id === id);
+          if (dish) openDish(dish);
+        });
+      });
+    }
+
+    function openDish(d){
+      const t = i18n[lang];
+      const name = (lang === "ar") ? d.name_ar : d.name_en;
+      const desc = (lang === "ar") ? d.desc_ar : d.desc_en;
+
+      el.modalMedia.style.display = "";
+      el.chipsRow.style.display = "flex";
+      el.divider.style.display = "";
+      el.modalNote.style.display = "";
+      el.contactBox.style.display = "none";
+
+      el.modalTitle.textContent = name;
+      el.modalDesc.textContent = desc;
+
+      el.chipCalories.textContent = `${d.calories} ${t.kcal}`;
+      el.chipPrice.textContent = `${fmtPrice(d.price)} ${t.jod}`;
+
+      el.modalImg.onload = () => {
+        el.imgHint.style.display = "none";
+        el.modalImg.style.display = "block";
+      };
+      el.modalImg.onerror = () => {
+        el.modalImg.style.display = "none";
+        el.imgHint.style.display = "grid";
+      };
+      el.modalImg.alt = name;
+      el.modalImg.src = d.img;
+
+      openModal();
+    }
+
+    function openContact(){
+      const t = i18n[lang];
+
+      el.modalMedia.style.display = "none";
+      el.chipsRow.style.display = "none";
+      el.divider.style.display = "none";
+      el.modalNote.style.display = "none";
+
+      el.modalTitle.textContent = t.contactTitle;
+      el.modalDesc.textContent = t.contactDesc;
+
+      el.contactText.textContent = CONTACT_NUMBER;
+      el.waBtn.href = CONTACT_WA;
+
+      el.contactBox.style.display = "flex";
+
+      openModal();
+    }
+
+    function openModal(){
+      el.modalBackdrop.style.display = "flex";
+      document.body.style.overflow = "hidden";
+    }
+    function closeModal(){
+      el.modalBackdrop.style.display = "none";
+      document.body.style.overflow = "";
+      el.modalImg.src = "";
+    }
+
+    el.copyBtn.addEventListener("click", async () => {
+      const t = i18n[lang];
+      try{
+        await navigator.clipboard.writeText(CONTACT_NUMBER);
+        const old = el.copyBtn.textContent;
+        el.copyBtn.textContent = t.copied;
+        setTimeout(()=> el.copyBtn.textContent = t.copy, 900);
+      }catch(e){
+        alert(CONTACT_NUMBER);
+      }
+    });
+
+    el.closeModal.addEventListener("click", closeModal);
+    el.modalBackdrop.addEventListener("click", (e) => {
+      if (e.target === el.modalBackdrop) closeModal();
+    });
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && el.modalBackdrop.style.display === "flex") closeModal();
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener("click", (e) => {
+        const id = a.getAttribute("href");
+        if (id === "#contact"){
+          e.preventDefault();
+          openContact();
+          return;
+        }
+        const target = document.querySelector(id);
+        if (!target) return;
+        e.preventDefault();
+        target.scrollIntoView({behavior:"smooth", block:"start"});
+      });
+    });
+
+    el.navContact.addEventListener("click", (e) => {
+      e.preventDefault();
+      openContact();
+    });
+
+    el.langToggle.addEventListener("click", () => {
+      applyLang(lang === "en" ? "ar" : "en");
+    });
+
+    applyLang("en");
+  </script>
+</body>
+</html>
